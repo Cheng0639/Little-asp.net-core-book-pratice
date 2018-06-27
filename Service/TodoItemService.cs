@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,5 +23,19 @@ namespace mvc.Service
                 .Where(todo => !todo.IsDone)
                 .ToListAsync();
         }
+
+        public async Task<bool> AddItemAsync(TodoItem newItem)
+        {
+            newItem.Id = Guid.NewGuid();
+            newItem.IsDone = false;
+            newItem.DueAt = DateTimeOffset.Now.AddDays(3);
+
+            context.Items.Add(newItem);
+
+            var saveResult = await context.SaveChangesAsync();
+
+            return saveResult == 1;
+        }
+
     }
 }

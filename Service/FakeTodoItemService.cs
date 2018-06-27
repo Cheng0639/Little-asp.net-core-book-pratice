@@ -8,6 +8,11 @@ namespace mvc.Service
 {
     public class FakeTodoItemService : ITodoItemService
     {
+        public Task<bool> AddItemAsync(TodoItem newItem)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<TodoItem>> GetInCompleteItemsAsync()
         {
             var result = new[]{
