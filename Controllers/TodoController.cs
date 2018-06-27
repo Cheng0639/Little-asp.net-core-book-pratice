@@ -26,5 +26,25 @@ namespace mvc.Controllers
 
             return View(viewModel);
         }
+
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddItem(TodoItem newItem)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var addItemReseult = todoItemService.AddItemAync(newItem);
+
+            if (!addItemReseult)
+            {
+                return BadRequest("Could not add item");
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
     }
 }
