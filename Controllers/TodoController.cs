@@ -1,25 +1,32 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using mvc.Models;
 using mvc.Service;
 
 namespace mvc.Controllers
 {
+    [Authorize]
     public class TodoController : Controller
     {
-        public TodoController(ITodoItemService todoItemService)
+        public TodoController(ITodoItemService todoItemService, UserManager<IdentityUser> userManager)
         {
             this.todoItemService = todoItemService;
+            this.userManager = userManager;
         }
 
         private readonly ITodoItemService todoItemService;
+        private readonly UserManager<IdentityUser> userManager;
 
         public async Task<IActionResult> Index()
         {
-            var result = await todoItemService.GetInCompleteItemsAsync();
+            var currentUser = await userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
 
+            var result = await todoItemService.GetInCompleteItemsAsync(currentUser);
             var viewModel = new TodoViewModel
             {
                 Items = result.ToArray()
@@ -36,7 +43,10 @@ namespace mvc.Controllers
                 return RedirectToAction("Index");
             }
 
-            var addItemReseult = await todoItemService.AddItemAsync(newItem);
+            var currentUser = await userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
+            var addItemReseult = await todoItemService.AddItemAsync(newItem, currentUser);
 
             if (!addItemReseult)
             {
@@ -56,7 +66,10 @@ namespace mvc.Controllers
                 return RedirectToAction("Index");
             }
 
-            var sucessful = await todoItemService.MarkDoneAsync(Id);
+            var currentUser = await userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
+            var sucessful = await todoItemService.MarkDoneAsync(Id, currentUser);
 
             if (sucessful)
             {
