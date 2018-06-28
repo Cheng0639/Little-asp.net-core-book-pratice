@@ -7,10 +7,10 @@ namespace mvc.Service
 {
     public interface ITodoItemService
     {
-        Task<IEnumerable<TodoItem>> GetInCompleteItemsAsync();
+        Task<IEnumerable<TodoItem>> GetInCompleteItemsAsync(ApplicationUser user);
 
-        Task<bool> AddItemAsync(TodoItem newItem);
+        Task<bool> AddItemAsync(TodoItem newItem, ApplicationUser user);
 
-        Task<bool> MarkDoneAsync(Guid id);
+        Task<bool> MarkDoneAsync(Guid id, ApplicationUser user);
     }
 }
