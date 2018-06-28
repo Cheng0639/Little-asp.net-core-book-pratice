@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using mvc.Models;
@@ -9,5 +10,7 @@ namespace mvc.Service
         Task<IEnumerable<TodoItem>> GetInCompleteItemsAsync();
 
         Task<bool> AddItemAsync(TodoItem newItem);
+
+        Task<bool> MarkDoneAsync(Guid id);
     }
 }
