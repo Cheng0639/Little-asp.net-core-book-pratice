@@ -3,35 +3,24 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using mvc.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace mvc.Service
 {
     public class FakeTodoItemService : ITodoItemService
     {
-        public Task<bool> AddItemAsync(TodoItem newItem)
+
+        public Task<IEnumerable<TodoItem>> GetInCompleteItemsAsync(IdentityUser user)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<TodoItem>> GetInCompleteItemsAsync()
+        public Task<bool> AddItemAsync(TodoItem newItem, IdentityUser user)
         {
-            var result = new[]{
-                new TodoItem
-                {
-                    Title = "Learn ASP.NET Core",
-                    DueAt = DateTimeOffset.Now.AddDays(1)
-                },
-                new TodoItem
-                {
-                    Title = "Build awesome apps",
-                    DueAt = DateTimeOffset.Now.AddDays(2)
-                },
-            };
-
-            return Task.FromResult(result.AsEnumerable());
+            throw new NotImplementedException();
         }
 
-        public Task<bool> MarkDoneAsync(Guid id)
+        public Task<bool> MarkDoneAsync(Guid id, IdentityUser user)
         {
             throw new NotImplementedException();
         }

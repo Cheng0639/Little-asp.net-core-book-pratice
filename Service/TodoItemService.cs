@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using mvc.Data;
 using mvc.Models;
@@ -17,18 +18,19 @@ namespace mvc.Service
 
         private readonly ApplicationDbContext context;
 
-        public async Task<IEnumerable<TodoItem>> GetInCompleteItemsAsync()
+        public async Task<IEnumerable<TodoItem>> GetInCompleteItemsAsync(IdentityUser user)
         {
             return await context.Items
-                .Where(todo => !todo.IsDone)
+                .Where(todo => !todo.IsDone && todo.UserId == user.Id)
                 .ToListAsync();
         }
 
-        public async Task<bool> AddItemAsync(TodoItem newItem)
+        public async Task<bool> AddItemAsync(TodoItem newItem, IdentityUser user)
         {
             newItem.Id = Guid.NewGuid();
             newItem.IsDone = false;
             newItem.DueAt = DateTimeOffset.Now.AddDays(3);
+            newItem.UserId = user.Id;
 
             context.Items.Add(newItem);
 
@@ -37,13 +39,13 @@ namespace mvc.Service
             return saveResult == 1;
         }
 
-        public async Task<bool> MarkDoneAsync(Guid id)
+        public async Task<bool> MarkDoneAsync(Guid id, IdentityUser user)
         {
             var item = await context.Items
-                .Where(x => x.Id == id)
+                .Where(x => x.Id == id && x.UserId == user.Id)
                 .SingleOrDefaultAsync();
 
-            if( item == null ) return false;
+            if (item == null) return false;
 
             item.IsDone = true;
 
