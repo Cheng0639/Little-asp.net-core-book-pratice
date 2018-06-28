@@ -37,5 +37,19 @@ namespace mvc.Service
             return saveResult == 1;
         }
 
+        public async Task<bool> MarkDoneAsync(Guid id)
+        {
+            var item = await context.Items
+                .Where(x => x.Id == id)
+                .SingleOrDefaultAsync();
+
+            if( item == null ) return false;
+
+            item.IsDone = true;
+
+            var saveResult = await context.SaveChangesAsync();
+
+            return saveResult == 1;
+        }
     }
 }

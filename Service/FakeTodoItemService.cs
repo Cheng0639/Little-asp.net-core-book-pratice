@@ -30,5 +30,10 @@ namespace mvc.Service
 
             return Task.FromResult(result.AsEnumerable());
         }
+
+        public Task<bool> MarkDoneAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
