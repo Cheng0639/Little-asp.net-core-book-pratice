@@ -35,7 +35,7 @@ namespace mvc.Controllers
                 return RedirectToAction("Index");
             }
 
-            var addItemReseult = todoItemService.AddItemAync(newItem);
+            var addItemReseult = await todoItemService.AddItemAsync(newItem);
 
             if (!addItemReseult)
             {
