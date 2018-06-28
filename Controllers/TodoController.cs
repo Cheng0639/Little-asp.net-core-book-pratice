@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,26 @@ namespace mvc.Controllers
             else
             {
                 return RedirectToAction("Index");
+            }
+        }
+
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkDone(Guid Id)
+        {
+            if (Id == Guid.Empty)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var sucessful = await todoItemService.MarkDoneAsync(Id);
+
+            if (sucessful)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return BadRequest("Could not mark item as done");
             }
         }
     }
